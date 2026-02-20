@@ -3064,28 +3064,26 @@
             initDoctors(days);
         }
 
-        function initGallery() {
-            const grid = document.getElementById('galleryGrid');
-            const images = [
-    { url: 'https://i.postimg.cc/VLKTwh7R/20260218_164015.jpg', title: 'Hospital Building' },
-    { url: 'https://i.postimg.cc/3Jt6hqL2/20260218_164203.jpg', title: 'Hospital Reception' },
-    { url: 'https://i.postimg.cc/zXxMNQdF/20260218_164437.jpg', title: 'Medical Facilities' },
-    { url: 'https://i.postimg.cc/c4FjWzDc/20260218_164531.jpg', title: 'Patient Care' },
-    { url: 'https://i.postimg.cc/4NWMG088/20260218_164625.jpg', title: 'Modern Equipment' },
-    { url: 'https://i.postimg.cc/jdM9T189/20260218_164757.jpg', title: 'Hospital Interior' }
-];
-
-            
-            if (grid) {
-                grid.innerHTML = images.map(function(img) {
-                    return '<div class="gallery-item" onclick="openImageModal(\'' + img.url + '\')">' +
-                        '<img src="' + img.url + '" alt="' + img.title + '">' +
-                        '<div class="gallery-overlay"><i class="fas fa-expand"></i><h4>' + img.title + '</h4></div>' +
-                    '</div>';
-                }).join('');
-            }
-        }
-
+       function initGallery() {
+    const grid = document.getElementById('galleryGrid');
+    const images = [
+        { url: 'https://i.postimg.cc/VLKTwh7R/20260218_164015.jpg', title: 'Hospital Building' },
+        { url: 'https://i.postimg.cc/3Jt6hqL2/20260218_164203.jpg', title: 'Hospital Reception' },
+        { url: 'https://i.postimg.cc/zXxMNQdF/20260218_164437.jpg', title: 'Medical Facilities' },
+        { url: 'https://i.postimg.cc/c4FjWzDc/20260218_164531.jpg', title: 'Patient Care' },
+        { url: 'https://i.postimg.cc/4NWMG088/20260218_164625.jpg', title: 'Modern Equipment' },
+        { url: 'https://i.postimg.cc/jdM9T189/20260218_164757.jpg', title: 'Hospital Interior' }
+    ];
+    
+    if (grid) {
+        grid.innerHTML = images.map(function(img) {
+            return '<div class="gallery-item" onclick="openImageModal(\'' + img.url + '\')">' +
+                '<img src="' + img.url + '" alt="' + img.title + '" loading="lazy">' +
+                '<div class="gallery-overlay"><i class="fas fa-expand"></i><h4>' + img.title + '</h4></div>' +
+            '</div>';
+        }).join('');
+    }
+}
         function initCounters() {
             const counters = document.querySelectorAll('.counter');
             counters.forEach(function(counter) {
