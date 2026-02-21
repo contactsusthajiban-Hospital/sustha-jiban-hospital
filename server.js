@@ -18,22 +18,43 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ MongoDB Connected'))
   .catch(err => console.log('❌ MongoDB Error:', err));
 
-// Schemas
+// Enhanced Schemas
 const Doctor = mongoose.model('Doctor', new mongoose.Schema({
-  id: Number, name: String, nameBn: String, qualification: String,
-  qualificationBn: String, specialty: String, specialtyBn: String,
-  timing: String, timingBn: String, days: String
+  id: Number, 
+  name: String, 
+  nameBn: String, 
+  qualification: String,
+  qualificationBn: String, 
+  specialty: String, 
+  specialtyBn: String,
+  timing: String, 
+  timingBn: String, 
+  days: String
 }));
 
 const Patient = mongoose.model('Patient', new mongoose.Schema({
-  patientId: String, firstName: String, lastName: String,
-  phone: String, email: String, visits: Number, lastVisit: String
+  patientId: String, 
+  firstName: String, 
+  lastName: String,
+  phone: String, 
+  email: String, 
+  visits: { type: Number, default: 1 }, 
+  lastVisit: String,
+  createdAt: { type: Date, default: Date.now }
 }));
 
 const Appointment = mongoose.model('Appointment', new mongoose.Schema({
-  appointmentId: String, patientId: String, firstName: String,
-  lastName: String, phone: String, email: String, doctor: String,
-  doctorTiming: String, date: String, time: String, symptoms: String,
+  appointmentId: String, 
+  patientId: String, 
+  firstName: String,
+  lastName: String, 
+  phone: String, 
+  email: String, 
+  doctor: String,
+  doctorTiming: String, 
+  date: String, 
+  time: String, 
+  symptoms: String,
   status: { type: String, default: 'pending' },
   createdAt: { type: Date, default: Date.now }
 }));
@@ -73,28 +94,68 @@ app.get('/api/slots', async (req, res) => {
   res.json(allSlots.filter(s=>!booked.includes(s)));
 });
 
+// FIXED: Enhanced appointment creation with all fields
 app.post('/api/appointments', async (req, res) => {
   const { firstName, lastName, phone, email, doctor, date, time, symptoms } = req.body;
+  
+  // Find or create patient
   let patient = await Patient.findOne({phone});
   const patientId = patient?.patientId || 'PT'+uuidv4().slice(0,6).toUpperCase();
   
-  if (!patient) await new Patient({patientId, firstName, lastName, phone, email, visits:1, lastVisit:date}).save();
-  else await Patient.updateOne({phone}, {$inc:{visits:1}, lastVisit:date});
+  if (!patient) {
+    await new Patient({
+      patientId, 
+      firstName, 
+      lastName, 
+      phone, 
+      email: email || '', 
+      visits: 1, 
+      lastVisit: date
+    }).save();
+  } else {
+    await Patient.updateOne(
+      {phone}, 
+      {
+        $inc: {visits: 1}, 
+        lastVisit: date,
+        // Update email if provided and not already set
+        ...(email && !patient.email ? {email} : {})
+      }
+    );
+  }
   
-  const doc = await Doctor.findOne({name:doctor});
+  const doc = await Doctor.findOne({name: doctor});
+  const appointmentId = 'SJ'+Date.now().toString().slice(-6);
+  
   const appointment = await new Appointment({
-    appointmentId: 'SJ'+Date.now().toString().slice(-6),
-    patientId, firstName, lastName, phone, email, doctor,
-    doctorTiming: doc?.timing || '', date, time, symptoms
+    appointmentId, 
+    patientId, 
+    firstName, 
+    lastName, 
+    phone, 
+    email: email || '', 
+    doctor,
+    doctorTiming: doc?.timing || '', 
+    date, 
+    time, 
+    symptoms: symptoms || '',
+    status: 'pending'
   }).save();
   
-  res.json({success:true, appointmentId: appointment.appointmentId, appointment});
+  res.json({
+    success: true, 
+    appointmentId: appointment.appointmentId, 
+    appointment
+  });
 });
 
 app.post('/api/admin/login', (req, res) => {
   const { username, password } = req.body;
   if (username === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD) {
-    res.json({success:true, token: jwt.sign({role:'admin'}, process.env.JWT_SECRET, {expiresIn:'24h'})});
+    res.json({
+      success: true, 
+      token: jwt.sign({role:'admin'}, process.env.JWT_SECRET, {expiresIn:'24h'})
+    });
   } else res.status(401).json({error:'Invalid'});
 });
 
@@ -103,23 +164,47 @@ app.get('/api/admin/stats', auth, async (req, res) => {
     total: await Appointment.countDocuments(),
     pending: await Appointment.countDocuments({status:'pending'}),
     confirmed: await Appointment.countDocuments({status:'confirmed'}),
+    completed: await Appointment.countDocuments({status:'completed'}),
+    cancelled: await Appointment.countDocuments({status:'cancelled'}),
     patients: await Patient.countDocuments()
   });
 });
 
-app.get('/api/admin/appointments', auth, async (req, res) => res.json(await Appointment.find().sort({createdAt:-1})));
-app.get('/api/admin/patients', auth, async (req, res) => res.json(await Patient.find().sort({createdAt:-1})));
+// FIXED: Return all appointment data including symptoms
+app.get('/api/admin/appointments', auth, async (req, res) => {
+  const appointments = await Appointment.find()
+    .sort({createdAt: -1})
+    .select('appointmentId patientId firstName lastName phone email doctor date time symptoms status createdAt');
+  res.json(appointments);
+});
+
+// FIXED: Return all patient data
+app.get('/api/admin/patients', auth, async (req, res) => {
+  const patients = await Patient.find()
+    .sort({createdAt: -1})
+    .select('patientId firstName lastName phone email visits lastVisit createdAt');
+  res.json(patients);
+});
 
 app.patch('/api/admin/appointments/:id', auth, async (req, res) => {
-  await Appointment.findOneAndUpdate({appointmentId: req.params.id}, {status: req.body.status});
+  await Appointment.findOneAndUpdate(
+    {appointmentId: req.params.id}, 
+    {status: req.body.status}
+  );
   res.json({success:true});
 });
 
+// FIXED: Enhanced CSV export with all fields
 app.get('/api/admin/export', auth, async (req, res) => {
-  const data = await Appointment.find();
-  let csv = 'ID,Patient,Phone,Doctor,Date,Time,Status\n';
-  csv += data.map(a=>`${a.appointmentId},"${a.firstName} ${a.lastName}",${a.phone},${a.doctor},${a.date},${a.time},${a.status}`).join('\n');
-  res.set('Content-Type','text/csv').set('Content-Disposition','attachment; filename=appointments.csv').send(csv);
+  const appointments = await Appointment.find().sort({createdAt: -1});
+  let csv = 'Appointment ID,Patient ID,First Name,Last Name,Phone,Email,Doctor,Date,Time,Symptoms,Status,Created At\n';
+  csv += appointments.map(a => 
+    `"${a.appointmentId}","${a.patientId}","${a.firstName}","${a.lastName}","${a.phone}","${a.email || ''}","${a.doctor}","${a.date}","${a.time}","${(a.symptoms || '').replace(/"/g, '""')}","${a.status}","${a.createdAt}"`
+  ).join('\n');
+  
+  res.set('Content-Type','text/csv')
+     .set('Content-Disposition','attachment; filename=appointments.csv')
+     .send(csv);
 });
 
 // Serve index.html
