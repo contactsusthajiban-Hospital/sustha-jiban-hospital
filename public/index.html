@@ -3262,34 +3262,35 @@ Sustha Jiban Medical Centre is proud to be Durgapur's first and most advanced ho
         }
 
         async function handleAdminLogin(e) {
-            e.preventDefault();
-            const user = document.getElementById('adminUsername').value;
-            const pass = document.getElementById('adminPassword').value;
-            
-            try {
-                const response = await fetch(`${API_URL}/api/admin/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: user, password: pass })
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    store.currentAdmin = { username: user, token: result.token };
-                    localStorage.setItem('sjmc_admin_token', result.token);
-                    closeModal('adminLoginModal');
-                    showPanel('adminPanel');
-                    updateAdminStats();
-                    showToast('success', 'Welcome!', 'Logged in successfully');
-                } else {
-                    showToast('error', 'Error', 'Invalid credentials');
-                }
-            } catch (err) {
-                console.error('Login error:', err);
-                showToast('error', 'Error', 'Network error');
-            }
+    e.preventDefault();
+    const user = document.getElementById('adminUsername').value;
+    const pass = document.getElementById('adminPassword').value;
+    
+    try {
+        const response = await fetch(`${API_URL}/api/admin/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: user, password: pass })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success && result.token) {
+            store.currentAdmin = { username: user, token: result.token };
+            localStorage.setItem('sjmc_admin_token', result.token);
+            closeModal('adminLoginModal');
+            document.getElementById('mainWebsite').style.display = 'none';
+            document.getElementById('adminPanel').classList.add('active');
+            updateAdminStats();
+            showToast('success', 'Welcome!', 'Logged in successfully');
+        } else {
+            showToast('error', 'Error', 'Invalid credentials');
         }
+    } catch (err) {
+        console.error('Login error:', err);
+        showToast('error', 'Error', 'Network error. Check console.');
+    }
+}
 
         function handlePatientLogin(e) {
             e.preventDefault();
