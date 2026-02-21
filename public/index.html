@@ -1,4 +1,7 @@
- <meta charset="UTF-8">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Sustha Jiban Medical Centre | সুস্থ জীবন মেডিকেল সেন্টার</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -700,7 +703,7 @@
             }
         }
 
-        /* About Section - Enhanced */
+        /* About Section */
         .about-content {
             display: grid;
             grid-template-columns: 1fr;
@@ -820,51 +823,6 @@
         }
 
         .about-feature i { color: var(--success); }
-
-        /* Trust Indicators - New */
-        .trust-indicators {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 2px solid #e5e7eb;
-        }
-
-        @media (min-width: 768px) {
-            .trust-indicators {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 1.5rem;
-                margin-top: 2.5rem;
-                padding-top: 2.5rem;
-            }
-        }
-
-        .trust-item {
-            text-align: center;
-            padding: 1rem;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-
-        .trust-item i {
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .trust-item h4 {
-            font-size: 0.9rem;
-            color: var(--dark);
-            font-weight: 700;
-        }
-
-        .trust-item p {
-            font-size: 0.75rem;
-            color: #666;
-            margin: 0;
-        }
 
         /* Doctors */
         .doctor-filters {
@@ -2078,7 +2036,7 @@
             to { transform: translateX(0); opacity: 1; }
         }
 
-        /* Admin Panel - Enhanced */
+        /* Admin Panel */
         .panel {
             display: none;
             min-height: 100vh;
@@ -2374,11 +2332,10 @@
             }
         }
 
-        /* Enhanced Data Table */
         .data-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 800px;
+            min-width: 600px;
         }
 
         .data-table th {
@@ -2389,7 +2346,6 @@
             color: var(--dark);
             font-size: 0.75rem;
             text-transform: uppercase;
-            white-space: nowrap;
         }
 
         @media (min-width: 768px) {
@@ -2403,17 +2359,12 @@
             padding: 0.75rem;
             border-bottom: 1px solid #e5e7eb;
             font-size: 0.9rem;
-            vertical-align: top;
         }
 
         @media (min-width: 768px) {
             .data-table td {
                 padding: 1rem;
             }
-        }
-
-        .data-table tr:hover {
-            background: #f9fafb;
         }
 
         .status-badge {
@@ -2451,7 +2402,6 @@
             align-items: center;
             justify-content: center;
             font-size: 0.85rem;
-            transition: all 0.3s;
         }
 
         @media (min-width: 768px) {
@@ -2460,10 +2410,6 @@
                 height: 36px;
                 border-radius: 10px;
             }
-        }
-
-        .btn-icon:hover {
-            transform: scale(1.1);
         }
 
         .hidden { display: none !important; }
@@ -2475,44 +2421,6 @@
 
         .admin-section:not(.hidden) {
             display: block;
-        }
-
-        /* Patient Details Modal - New */
-        .patient-details-modal {
-            max-width: 700px !important;
-        }
-
-        .patient-info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .patient-info-item {
-            background: #f9fafb;
-            padding: 1rem;
-            border-radius: 12px;
-        }
-
-        .patient-info-item.full {
-            grid-column: 1 / -1;
-        }
-
-        .patient-info-item label {
-            font-size: 0.75rem;
-            color: #666;
-            text-transform: uppercase;
-            font-weight: 600;
-            display: block;
-            margin-bottom: 0.25rem;
-        }
-
-        .patient-info-item p {
-            font-size: 1rem;
-            color: var(--dark);
-            font-weight: 600;
-            margin: 0;
         }
 
         /* Print styles */
@@ -2559,7 +2467,7 @@
                     <li><a href="#contact" data-en="Contact" data-bn="যোগাযোগ">Contact</a></li>
                 </ul>
                 <div class="nav-cta">
-                     <button class="btn btn-secondary" onclick="openModal('loginModal')">
+                    <button class="btn btn-secondary" onclick="openModal('loginModal')">
                         <i class="fas fa-user"></i> <span data-en="Login" data-bn="লগইন">Login</span>
                     </button>
                     <button class="btn btn-primary" onclick="scrollToAppt()">
@@ -2601,12 +2509,12 @@
                         </div>
                         <div class="stat-card-hero">
                             <h3 class="counter" data-target="50">0</h3>
-                            <p data-en="Years Combined Experience " data-bn="সম্মিলিত অভিজ্ঞতার সময়কাল">Years Combined Experience</p>
+                            <p data-en="Years Combined Experience" data-bn="সম্মিলিত অভিজ্ঞতার সময়কাল">Years Combined Experience</p>
                         </div>
                     </div>
                 </div>
                 <div class="hero-image">
-                    <img src="https://i.postimg.cc/BQmy3zhY/20260218_164844.jpg" alt="Hospital">
+    <img src="https://i.postimg.cc/BQmy3zhY/20260218_164844.jpg" alt="Hospital">
                     <div class="opening-badge">
                         <span data-en="Grand" data-bn="গ্র্যান্ড">Grand</span>
                         <strong>2026</strong>
@@ -2659,17 +2567,18 @@
             </div>
         </section>
 
-        <!-- About Section - Enhanced for New Hospital -->
+        <!-- About Section -->
         <section class="about-section" id="about">
             <div class="container">
                 <div class="about-content">
-                    <div class="about-image">
-                        <img src="https://i.postimg.cc/BQmy3zhY/20260218_164844.jpg" alt="Hospital">
+                   <div class="about-image">
+    <img src="https://i.postimg.cc/BQmy3zhY/20260218_164844.jpg" alt="Hospital">
                         <div class="experience-badge">
-      <p data-en="Excellence in Care" data-bn="যত্নে উৎকর্ষতা">Excellence in Care</p>
+                        
+                            <p data-en="Years of Excellence" data-bn="বছরের উৎকর্ষতা">Years of Excellence</p>
                         </div>
                     </div>
-                    <div class="about-text">
+                   <div class="about-text">
                         <span class="section-tag"><i class="fas fa-info-circle"></i> <span data-en="About Us" data-bn="আমাদের সম্পর্কে">About Us</span></span>
                        <h2 data-en="Leading Healthcare Excellence in Durgapur" data-bn="দুর্গাপুরে স্বাস্থ্যসেবার নতুন মানদণ্ড">Leading Healthcare Excellence in Durgapur</h2>
                         
@@ -2698,6 +2607,7 @@ Sustha Jiban Medical Centre is proud to be Durgapur's first and most advanced ho
                 </div>
             </div>
         </section>
+
 
         <!-- Doctors -->
         <section class="doctors" id="doctors">
@@ -2799,8 +2709,8 @@ Sustha Jiban Medical Centre is proud to be Durgapur's first and most advanced ho
                             </select>
                         </div>
                         <div class="form-group full">
-                            <label data-en="Symptoms / Problem" data-bn="লক্ষণ / সমস্যা">Symptoms / Problem</label>
-                            <textarea id="aptSymptoms" rows="3" placeholder="Describe your symptoms or health concerns..."></textarea>
+                            <label data-en="Symptoms" data-bn="লক্ষণ">Symptoms</label>
+                            <textarea id="aptSymptoms" rows="3"></textarea>
                         </div>
                     </div>
                     <button type="submit" class="btn-submit">
@@ -2838,7 +2748,7 @@ Sustha Jiban Medical Centre is proud to be Durgapur's first and most advanced ho
             <div class="footer-grid">
                 <div class="footer-brand">
                     <h3><i class="fas fa-heartbeat"></i> Sustha Jiban</h3>
-                    <p data-en="Super Speciality Hospital - Now Open in 2026" data-bn="সুপার স্পেশালিটি হাসপাতাল - ২০২৬ সালে এখন খোলা">Super Speciality Hospital - Now Open in 2026</p>
+                    <p data-en="Super Speciality Hospital since 2008" data-bn="২০০৮ সাল থেকে সুপার স্পেশালিটি হাসপাতাল">Super Speciality Hospital since 2008</p>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
                         <a href="#"><i class="fab fa-whatsapp"></i></a>
@@ -2925,7 +2835,7 @@ Sustha Jiban Medical Centre is proud to be Durgapur's first and most advanced ho
                     </div>
                     <button type="submit" class="btn btn-primary" style="width: 100%;">Access Dashboard</button>
                 </form>
-          
+                <p style="text-align: center; margin-top: 1rem; color: #666; font-size: 0.9rem;">Default: admin / admin123</p>
             </div>
         </div>
     </div>
@@ -2942,19 +2852,6 @@ Sustha Jiban Medical Centre is proud to be Durgapur's first and most advanced ho
                     <i class="fas fa-print"></i> Print
                 </button>
                 <button class="btn btn-secondary" onclick="closeModal('confirmationModal')" style="flex: 1; min-width: 120px;">Close</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Patient Details Modal - New -->
-    <div class="modal" id="patientDetailsModal">
-        <div class="modal-content patient-details-modal">
-            <div class="modal-header">
-                <h3><i class="fas fa-user-injured"></i> Patient Details</h3>
-                <button class="modal-close" onclick="closeModal('patientDetailsModal')"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="modal-body" id="patientDetailsContent">
-                <!-- Dynamic content -->
             </div>
         </div>
     </div>
@@ -3033,15 +2930,7 @@ Sustha Jiban Medical Centre is proud to be Durgapur's first and most advanced ho
                     <div class="card-body">
                         <table class="data-table">
                             <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Patient</th>
-                                    <th>Phone</th>
-                                    <th>Doctor</th>
-                                    <th>Date & Time</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
+                                <tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Status</th><th>Action</th></tr>
                             </thead>
                             <tbody id="recentAptTable"></tbody>
                         </table>
@@ -3052,23 +2941,13 @@ Sustha Jiban Medical Centre is proud to be Durgapur's first and most advanced ho
             <div id="adminAppointments" class="admin-section hidden">
                 <div class="topbar">
                     <h2>All Appointments</h2>
-                    <input type="text" id="aptSearch" placeholder="Search by name, phone, doctor..." onkeyup="filterAppointments()" style="padding: 10px; border-radius: 10px; border: 2px solid #e5e7eb; width: 100%; max-width: 300px;">
+                    <input type="text" id="aptSearch" placeholder="Search..." onkeyup="filterAppointments()" style="padding: 10px; border-radius: 10px; border: 2px solid #e5e7eb; width: 100%; max-width: 300px;">
                 </div>
                 <div class="card">
                     <div class="card-body">
                         <table class="data-table">
                             <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Patient Name</th>
-                                    <th>Contact</th>
-                                    <th>Doctor</th>
-                                    <th>Date</th>
-                                    <th>Time</th>
-                                    <th>Symptoms</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
+                                <tr><th>ID</th><th>Patient</th><th>Doctor</th><th>Date</th><th>Status</th><th>Actions</th></tr>
                             </thead>
                             <tbody id="allAptTable"></tbody>
                         </table>
@@ -3077,20 +2956,12 @@ Sustha Jiban Medical Centre is proud to be Durgapur's first and most advanced ho
             </div>
 
             <div id="adminPatients" class="admin-section hidden">
-                <div class="topbar"><h2>Patient Directory</h2></div>
+                <div class="topbar"><h2>Patients</h2></div>
                 <div class="card">
                     <div class="card-body">
                         <table class="data-table">
                             <thead>
-                                <tr>
-                                    <th>Patient ID</th>
-                                    <th>Name</th>
-                                    <th>Phone</th>
-                                    <th>Email</th>
-                                    <th>Last Visit</th>
-                                    <th>Total Visits</th>
-                                    <th>Action</th>
-                                </tr>
+                                <tr><th>ID</th><th>Name</th><th>Phone</th><th>Visits</th></tr>
                             </thead>
                             <tbody id="patientsTable"></tbody>
                         </table>
@@ -3208,27 +3079,26 @@ Sustha Jiban Medical Centre is proud to be Durgapur's first and most advanced ho
             initDoctors(days);
         }
 
-        function initGallery() {
+      function initGallery() {
             const grid = document.getElementById('galleryGrid');
             const images = [
-                { url: 'https://i.postimg.cc/zXxMNQdF/20260218_164437.jpg', title: 'Hospital Building' },
-                { url: 'https://i.postimg.cc/4NWMG088/20260218_164625.jpg', title: 'Modern Equipment' },
-                { url: 'https://i.postimg.cc/3Jt6hqL2/20260218-164203.jpg', title: 'Operation Theatre' },
+                { url: 'https://i.postimg.cc/zXxMNQdF/20260218_164437.jpg', title: 'Hospital Waiting Area' },
+                { url: 'https://i.postimg.cc/4NWMG088/20260218_164625.jpg', title: 'Reception' },
+                { url: 'https://i.postimg.cc/3Jt6hqL2/20260218-164203.jpg', title: 'Dental Care' },
                 { url: 'https://i.postimg.cc/VLKTwh7R/20260218-164015.jpg', title: 'Patient Room' },
-                { url: 'https://i.postimg.cc/jdM9T189/20260218-164757.jpg', title: 'Pathology Lab' },
-                { url: 'https://i.postimg.cc/c4FjWzDc/20260218-164531.jpg', title: 'Dental Care' }
+                { url: 'https://i.postimg.cc/jdM9T189/20260218-164757.jpg', title: 'Medical Shop' },
+                { url: 'https://i.postimg.cc/c4FjWzDc/20260218-164531.jpg', title: 'Doctor Room Care' }
             ];
-            
-            if (grid) {
-                grid.innerHTML = images.map(function(img) {
-                    return '<div class="gallery-item" onclick="openImageModal(\'' + img.url + '\')">' +
-                        '<img src="' + img.url + '" alt="' + img.title + '">' +
-                        '<div class="gallery-overlay"><i class="fas fa-expand"></i><h4>' + img.title + '</h4></div>' +
-                    '</div>';
-                }).join('');
-            }
-        }
-
+    
+    if (grid) {
+        grid.innerHTML = images.map(function(img) {
+            return '<div class="gallery-item" onclick="openImageModal(\'' + img.url + '\')">' +
+                '<img src="' + img.url + '" alt="' + img.title + '" loading="lazy">' +
+                '<div class="gallery-overlay"><i class="fas fa-expand"></i><h4>' + img.title + '</h4></div>' +
+            '</div>';
+        }).join('');
+    }
+}
         function initCounters() {
             const counters = document.querySelectorAll('.counter');
             counters.forEach(function(counter) {
@@ -3429,7 +3299,6 @@ Sustha Jiban Medical Centre is proud to be Durgapur's first and most advanced ho
             closeModal('loginModal');
         }
 
-        // ENHANCED: Fixed Admin Stats with all patient data
         async function updateAdminStats() {
             const token = localStorage.getItem('sjmc_admin_token');
             if (!token) return;
@@ -3445,193 +3314,51 @@ Sustha Jiban Medical Centre is proud to be Durgapur's first and most advanced ho
                 const appointments = await aptRes.json();
                 const patients = await patRes.json();
                 
-                // Store data globally for later use
-                store.appointments = appointments;
-                store.patients = patients;
+                document.getElementById('adminTotalApt').textContent = stats.total;
+                document.getElementById('adminPendingApt').textContent = stats.pending;
+                document.getElementById('adminConfirmedApt').textContent = stats.confirmed;
+                document.getElementById('adminTotalPatients').textContent = stats.patients;
+                document.getElementById('adminPendingBadge').textContent = stats.pending;
                 
-                // Update stats counters
-                document.getElementById('adminTotalApt').textContent = stats.total || appointments.length;
-                document.getElementById('adminPendingApt').textContent = stats.pending || appointments.filter(a => a.status === 'pending').length;
-                document.getElementById('adminConfirmedApt').textContent = stats.confirmed || appointments.filter(a => a.status === 'confirmed').length;
-                document.getElementById('adminTotalPatients').textContent = stats.patients || patients.length;
-                document.getElementById('adminPendingBadge').textContent = stats.pending || appointments.filter(a => a.status === 'pending').length;
-                
-                // Update Recent Appointments Table (Dashboard)
                 const recentTbody = document.getElementById('recentAptTable');
                 if (recentTbody) {
                     recentTbody.innerHTML = appointments.slice(0, 5).map(function(apt) {
                         return '<tr>' +
-                            '<td><strong>' + apt.appointmentId + '</strong></td>' +
                             '<td>' + apt.firstName + ' ' + apt.lastName + '</td>' +
-                            '<td>' + apt.phone + '</td>' +
                             '<td>Dr. ' + apt.doctor + '</td>' +
-                            '<td>' + apt.date + ' at ' + apt.time + '</td>' +
+                            '<td>' + apt.date + '</td>' +
                             '<td><span class="status-badge ' + apt.status + '">' + apt.status + '</span></td>' +
-                            '<td>' +
-                                '<button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="viewPatientDetails(\'' + apt.appointmentId + '\')">' +
-                                    '<i class="fas fa-eye"></i> View' +
-                                '</button>' +
-                            '</td>' +
+                            '<td><button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="updateAptStatus(\'' + apt.appointmentId + '\', \'confirmed\')">Confirm</button></td>' +
                         '</tr>';
                     }).join('');
                 }
                 
-                // Update All Appointments Table with ALL details
                 const allTbody = document.getElementById('allAptTable');
                 if (allTbody) {
                     allTbody.innerHTML = appointments.map(function(apt) {
-                        const symptoms = apt.symptoms ? (apt.symptoms.length > 30 ? apt.symptoms.substring(0, 30) + '...' : apt.symptoms) : 'N/A';
                         return '<tr>' +
                             '<td><strong>' + apt.appointmentId + '</strong></td>' +
                             '<td>' + apt.firstName + ' ' + apt.lastName + '</td>' +
-                            '<td>' + apt.phone + '<br><small>' + (apt.email || 'No email') + '</small></td>' +
                             '<td>Dr. ' + apt.doctor + '</td>' +
                             '<td>' + apt.date + '</td>' +
-                            '<td>' + apt.time + '</td>' +
-                            '<td><small>' + symptoms + '</small></td>' +
                             '<td><span class="status-badge ' + apt.status + '">' + apt.status + '</span></td>' +
                             '<td>' +
-                                '<div class="action-btns">' +
-                                    '<button class="btn-icon" style="background: #dbeafe; color: #2563eb;" onclick="viewPatientDetails(\'' + apt.appointmentId + '\')" title="View Details"><i class="fas fa-eye"></i></button>' +
-                                    '<button class="btn-icon" style="background: #dcfce7; color: #16a34a;" onclick="updateAptStatus(\'' + apt.appointmentId + '\', \'confirmed\')" title="Confirm"><i class="fas fa-check"></i></button>' +
-                                    '<button class="btn-icon" style="background: #fee2e2; color: #dc2626;" onclick="updateAptStatus(\'' + apt.appointmentId + '\', \'cancelled\')" title="Cancel"><i class="fas fa-times"></i></button>' +
-                                '</div>' +
+                                '<button class="btn-icon" style="background: #dcfce7; color: #16a34a;" onclick="updateAptStatus(\'' + apt.appointmentId + '\', \'confirmed\')"><i class="fas fa-check"></i></button>' +
+                                '<button class="btn-icon" style="background: #fee2e2; color: #dc2626;" onclick="updateAptStatus(\'' + apt.appointmentId + '\', \'cancelled\')"><i class="fas fa-times"></i></button>' +
                             '</td>' +
                         '</tr>';
                     }).join('');
                 }
                 
-                // Update Patients Table with full details
                 const patTbody = document.getElementById('patientsTable');
                 if (patTbody) {
                     patTbody.innerHTML = patients.map(function(p) {
-                        return '<tr>' +
-                            '<td><strong>' + p.patientId + '</strong></td>' +
-                            '<td>' + p.firstName + ' ' + p.lastName + '</td>' +
-                            '<td>' + p.phone + '</td>' +
-                            '<td>' + (p.email || 'N/A') + '</td>' +
-                            '<td>' + (p.lastVisit || 'N/A') + '</td>' +
-                            '<td>' + (p.visits || 1) + '</td>' +
-                            '<td>' +
-                                '<button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="viewPatientHistory(\'' + p.patientId + '\')">' +
-                                    '<i class="fas fa-history"></i> History' +
-                                '</button>' +
-                            '</td>' +
-                        '</tr>';
+                        return '<tr><td>' + p.patientId + '</td><td>' + p.firstName + ' ' + p.lastName + '</td><td>' + p.phone + '</td><td>' + p.visits + '</td></tr>';
                     }).join('');
                 }
             } catch (err) {
                 console.error('Stats error:', err);
-                showToast('error', 'Error', 'Failed to load admin data');
             }
-        }
-
-        // NEW: View Patient Details Modal
-        function viewPatientDetails(appointmentId) {
-            const apt = store.appointments.find(a => a.appointmentId === appointmentId);
-            if (!apt) return;
-            
-            const modal = document.getElementById('patientDetailsModal');
-            const content = document.getElementById('patientDetailsContent');
-            
-            content.innerHTML = 
-                '<div class="patient-info-grid">' +
-                    '<div class="patient-info-item">' +
-                        '<label>Appointment ID</label>' +
-                        '<p>' + apt.appointmentId + '</p>' +
-                    '</div>' +
-                    '<div class="patient-info-item">' +
-                        '<label>Status</label>' +
-                        '<p><span class="status-badge ' + apt.status + '">' + apt.status.toUpperCase() + '</span></p>' +
-                    '</div>' +
-                    '<div class="patient-info-item">' +
-                        '<label>Patient Name</label>' +
-                        '<p>' + apt.firstName + ' ' + apt.lastName + '</p>' +
-                    '</div>' +
-                    '<div class="patient-info-item">' +
-                        '<label>Phone Number</label>' +
-                        '<p>' + apt.phone + '</p>' +
-                    '</div>' +
-                    '<div class="patient-info-item">' +
-                        '<label>Email</label>' +
-                        '<p>' + (apt.email || 'Not provided') + '</p>' +
-                    '</div>' +
-                    '<div class="patient-info-item">' +
-                        '<label>Doctor</label>' +
-                        '<p>Dr. ' + apt.doctor + '</p>' +
-                    '</div>' +
-                    '<div class="patient-info-item">' +
-                        '<label>Date</label>' +
-                        '<p>' + apt.date + '</p>' +
-                    '</div>' +
-                    '<div class="patient-info-item">' +
-                        '<label>Time</label>' +
-                        '<p>' + apt.time + '</p>' +
-                    '</div>' +
-                    '<div class="patient-info-item full">' +
-                        '<label>Symptoms / Problem</label>' +
-                        '<p>' + (apt.symptoms || 'No symptoms recorded') + '</p>' +
-                    '</div>' +
-                '</div>' +
-                '<div style="display: flex; gap: 10px; margin-top: 1.5rem;">' +
-                    '<button class="btn btn-primary" onclick="updateAptStatus(\'' + apt.appointmentId + '\', \'confirmed\')" style="flex: 1;">' +
-                        '<i class="fas fa-check"></i> Confirm' +
-                    '</button>' +
-                    '<button class="btn btn-secondary" onclick="updateAptStatus(\'' + apt.appointmentId + '\', \'cancelled\')" style="flex: 1;">' +
-                        '<i class="fas fa-times"></i> Cancel' +
-                    '</button>' +
-                '</div>';
-            
-            modal.classList.add('active');
-        }
-
-        // NEW: View Patient History
-        function viewPatientHistory(patientId) {
-            const patientAppointments = store.appointments.filter(a => a.patientId === patientId);
-            const patient = store.patients.find(p => p.patientId === patientId);
-            
-            const modal = document.getElementById('patientDetailsModal');
-            const content = document.getElementById('patientDetailsContent');
-            
-            let historyHtml = '<h4 style="margin-bottom: 1rem;">Appointment History</h4>';
-            if (patientAppointments.length === 0) {
-                historyHtml += '<p>No previous appointments found.</p>';
-            } else {
-                historyHtml += '<table class="data-table" style="min-width: 100%;">' +
-                    '<thead><tr><th>Date</th><th>Doctor</th><th>Status</th></tr></thead>' +
-                    '<tbody>' +
-                    patientAppointments.map(apt => 
-                        '<tr>' +
-                            '<td>' + apt.date + ' ' + apt.time + '</td>' +
-                            '<td>Dr. ' + apt.doctor + '</td>' +
-                            '<td><span class="status-badge ' + apt.status + '">' + apt.status + '</span></td>' +
-                        '</tr>'
-                    ).join('') +
-                    '</tbody></table>';
-            }
-            
-            content.innerHTML = 
-                '<div class="patient-info-grid" style="margin-bottom: 1.5rem;">' +
-                    '<div class="patient-info-item">' +
-                        '<label>Patient ID</label>' +
-                        '<p>' + patientId + '</p>' +
-                    '</div>' +
-                    '<div class="patient-info-item">' +
-                        '<label>Name</label>' +
-                        '<p>' + (patient ? patient.firstName + ' ' + patient.lastName : 'N/A') + '</p>' +
-                    '</div>' +
-                    '<div class="patient-info-item">' +
-                        '<label>Phone</label>' +
-                        '<p>' + (patient ? patient.phone : 'N/A') + '</p>' +
-                    '</div>' +
-                    '<div class="patient-info-item">' +
-                        '<label>Total Visits</label>' +
-                        '<p>' + (patient ? patient.visits : patientAppointments.length) + '</p>' +
-                    '</div>' +
-                '</div>' +
-                historyHtml;
-            
-            modal.classList.add('active');
         }
 
         async function updateAptStatus(id, status) {
@@ -3647,11 +3374,8 @@ Sustha Jiban Medical Centre is proud to be Durgapur's first and most advanced ho
                 });
                 updateAdminStats();
                 showToast('success', 'Updated', 'Status changed to ' + status);
-                // Close patient details modal if open
-                closeModal('patientDetailsModal');
             } catch (err) {
                 console.error('Update error:', err);
-                showToast('error', 'Error', 'Failed to update status');
             }
         }
 
@@ -3677,7 +3401,6 @@ Sustha Jiban Medical Centre is proud to be Durgapur's first and most advanced ho
                 a.click();
             } catch (err) {
                 console.error('Export error:', err);
-                showToast('error', 'Error', 'Export failed');
             }
         }
 
