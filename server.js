@@ -7,35 +7,44 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+
+// CORS configuration - FIXED
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true }));
 
 // Static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// MongoDB Connection with retry
+// MongoDB Connection with better error handling
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-    await mongoose.connect(process.env.MONGODB_URI, {
+    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/susthajiban', {
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
     });
-    console.log('✅ MongoDB Connected');
+    console.log('✅ MongoDB Connected:', conn.connection.host);
   } catch (err) {
-    console.error('❌ MongoDB Error:', err.message);
+    console.error('❌ MongoDB Connection Error:', err.message);
+    // Don't exit process, let it retry
     setTimeout(connectDB, 5000);
   }
 };
 connectDB();
 
+// Handle MongoDB connection errors after initial connection
 mongoose.connection.on('error', err => {
-  console.error('MongoDB runtime error:', err);
+  console.error('MongoDB error after connection:', err);
 });
 
 mongoose.connection.on('disconnected', () => {
-  console.log('MongoDB disconnected. Reconnecting...');
-  setTimeout(connectDB, 5000);
+  console.log('MongoDB disconnected. Attempting to reconnect...');
+  connectDB();
 });
 
 // Enhanced Schemas
@@ -53,10 +62,10 @@ const Doctor = mongoose.model('Doctor', new mongoose.Schema({
 }));
 
 const Patient = mongoose.model('Patient', new mongoose.Schema({
-  patientId: String, 
+  patientId: { type: String, unique: true }, 
   firstName: String, 
   lastName: String,
-  phone: String, 
+  phone: { type: String, unique: true }, 
   email: String, 
   visits: { type: Number, default: 1 }, 
   lastVisit: String,
@@ -64,7 +73,7 @@ const Patient = mongoose.model('Patient', new mongoose.Schema({
 }));
 
 const Appointment = mongoose.model('Appointment', new mongoose.Schema({
-  appointmentId: String, 
+  appointmentId: { type: String, unique: true }, 
   patientId: String, 
   firstName: String,
   lastName: String, 
@@ -75,11 +84,11 @@ const Appointment = mongoose.model('Appointment', new mongoose.Schema({
   date: String, 
   time: String, 
   symptoms: String,
-  status: { type: String, default: 'pending' },
+  status: { type: String, default: 'pending', enum: ['pending', 'confirmed', 'completed', 'cancelled'] },
   createdAt: { type: Date, default: Date.now }
 }));
 
-// Init doctors
+// Initialize doctors with better error handling
 const initDoctors = async () => {
   try {
     const count = await Doctor.countDocuments();
@@ -97,30 +106,38 @@ const initDoctors = async () => {
       console.log('✅ Doctors initialized');
     }
   } catch (err) {
-    console.error('Doctor init error:', err);
+    console.error('❌ Doctor init error:', err);
   }
 };
-initDoctors();
 
-// Auth middleware
+// Call init after connection
+mongoose.connection.once('open', () => {
+  initDoctors();
+});
+
+// FIXED: Better auth middleware with detailed error
 const auth = (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-      return res.status(401).json({error: 'No token provided'});
+      return res.status(401).json({ error: 'No authorization header' });
     }
+    
     const token = authHeader.split(' ')[1];
     if (!token) {
-      return res.status(401).json({error: 'Invalid token format'});
+      return res.status(401).json({ error: 'No token provided' });
     }
-    req.user = jwt.verify(token, process.env.JWT_SECRET);
+    
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+    req.user = decoded;
     next();
   } catch (err) {
-    res.status(401).json({error: 'Invalid or expired token'});
+    console.error('Auth error:', err.message);
+    res.status(401).json({ error: 'Invalid or expired token', details: err.message });
   }
 };
 
-// Health check
+// Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'OK', 
@@ -135,25 +152,38 @@ app.get('/api/doctors', async (req, res) => {
     const doctors = await Doctor.find();
     res.json(doctors);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch doctors' });
+    res.status(500).json({ error: 'Failed to fetch doctors', details: err.message });
   }
 });
 
 app.get('/api/slots', async (req, res) => {
   try {
     const { doctor, date } = req.query;
+    if (!doctor || !date) {
+      return res.status(400).json({ error: 'Doctor and date required' });
+    }
+    
     const allSlots = ['09:00 AM','09:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM','12:00 PM','02:00 PM','02:30 PM','03:00 PM','03:30 PM','04:00 PM','04:30 PM','05:00 PM','05:30 PM','06:00 PM'];
-    const booked = (await Appointment.find({doctor, date, status:{$ne:'cancelled'}})).map(a=>a.time);
-    res.json(allSlots.filter(s=>!booked.includes(s)));
+    const booked = await Appointment.find({doctor, date, status:{$ne:'cancelled'}}).select('time');
+    const bookedSlots = booked.map(a => a.time);
+    
+    res.json(allSlots.filter(s => !bookedSlots.includes(s)));
   } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch slots' });
+    res.status(500).json({ error: 'Failed to fetch slots', details: err.message });
   }
 });
 
+// FIXED: Enhanced appointment creation with validation
 app.post('/api/appointments', async (req, res) => {
   try {
     const { firstName, lastName, phone, email, doctor, date, time, symptoms } = req.body;
     
+    // Validation
+    if (!firstName || !lastName || !phone || !doctor || !date || !time) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+    
+    // Find or create patient
     let patient = await Patient.findOne({phone});
     const patientId = patient?.patientId || 'PT'+uuidv4().slice(0,6).toUpperCase();
     
@@ -203,31 +233,32 @@ app.post('/api/appointments', async (req, res) => {
     });
   } catch (err) {
     console.error('Booking error:', err);
-    res.status(500).json({ error: 'Failed to create appointment' });
+    res.status(500).json({ error: 'Failed to create appointment', details: err.message });
   }
 });
 
+// FIXED: Admin login with new password
 app.post('/api/admin/login', (req, res) => {
   const { username, password } = req.body;
   
-  const validUsername = process.env.ADMIN_USERNAME || 'admin';
-  const validPassword = process.env.ADMIN_PASSWORD || 'NaCks@687haratna';
+  // NEW PASSWORD IMPLEMENTED HERE: NaCks@687haratna
+  const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
+  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'NaCks@687haratna';
   
-  console.log('Login attempt:', username);
-  
-  if (username === validUsername && password === validPassword) {
+  if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
     const token = jwt.sign(
       { role: 'admin', username }, 
-      process.env.JWT_SECRET, 
+      process.env.JWT_SECRET || 'your-secret-key', 
       { expiresIn: '24h' }
     );
+    
     res.json({
       success: true, 
-      token: token,
+      token,
       message: 'Login successful'
     });
   } else {
-    res.status(401).json({ success: false, error: 'Invalid credentials' });
+    res.status(401).json({ error: 'Invalid credentials' });
   }
 });
 
@@ -244,8 +275,7 @@ app.get('/api/admin/stats', auth, async (req, res) => {
     
     res.json({ total, pending, confirmed, completed, cancelled, patients });
   } catch (err) {
-    console.error('Stats error:', err);
-    res.status(500).json({ error: 'Failed to fetch stats' });
+    res.status(500).json({ error: 'Failed to fetch stats', details: err.message });
   }
 });
 
@@ -256,7 +286,7 @@ app.get('/api/admin/appointments', auth, async (req, res) => {
       .select('appointmentId patientId firstName lastName phone email doctor date time symptoms status createdAt');
     res.json(appointments);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch appointments' });
+    res.status(500).json({ error: 'Failed to fetch appointments', details: err.message });
   }
 });
 
@@ -267,19 +297,30 @@ app.get('/api/admin/patients', auth, async (req, res) => {
       .select('patientId firstName lastName phone email visits lastVisit createdAt');
     res.json(patients);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch patients' });
+    res.status(500).json({ error: 'Failed to fetch patients', details: err.message });
   }
 });
 
 app.patch('/api/admin/appointments/:id', auth, async (req, res) => {
   try {
-    await Appointment.findOneAndUpdate(
+    const { status } = req.body;
+    if (!['pending', 'confirmed', 'completed', 'cancelled'].includes(status)) {
+      return res.status(400).json({ error: 'Invalid status' });
+    }
+    
+    const apt = await Appointment.findOneAndUpdate(
       {appointmentId: req.params.id}, 
-      {status: req.body.status}
+      {status},
+      {new: true}
     );
-    res.json({success:true});
+    
+    if (!apt) {
+      return res.status(404).json({ error: 'Appointment not found' });
+    }
+    
+    res.json({success: true, appointment: apt});
   } catch (err) {
-    res.status(500).json({ error: 'Failed to update appointment' });
+    res.status(500).json({ error: 'Failed to update appointment', details: err.message });
   }
 });
 
@@ -295,21 +336,24 @@ app.get('/api/admin/export', auth, async (req, res) => {
        .set('Content-Disposition','attachment; filename=appointments.csv')
        .send(csv);
   } catch (err) {
-    res.status(500).json({ error: 'Export failed' });
+    res.status(500).json({ error: 'Export failed', details: err.message });
   }
 });
 
-// Serve index.html
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// Serve index.html for all routes (SPA support)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error('Server error:', err);
+  res.status(500).json({ error: 'Internal server error', details: err.message });
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`🔑 Admin: admin / NaCks@687haratna`);
+  console.log(`📊 Admin Panel: http://localhost:${PORT}`);
+  console.log(`🔑 Default Admin: admin / NaCks@687haratna`);
 });
